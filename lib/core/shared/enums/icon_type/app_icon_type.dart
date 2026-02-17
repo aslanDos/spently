@@ -1,0 +1,17 @@
+enum AppIconType {
+  add,
+  bank,
+  wallet,
+  card,
+  cash,
+  crypto,
+  savings,
+  investment,
+  business,
+  shopping,
+  food,
+  transport,
+  health,
+  education,
+  gift,
+}
