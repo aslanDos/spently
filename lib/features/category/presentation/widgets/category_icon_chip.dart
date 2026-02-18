@@ -8,6 +8,7 @@ Widget buildCategoryIconChip({
   double? size,
 }) {
   return Container(
+    margin: EdgeInsets.only(right: 12),
     width: size ?? 44,
     height: size ?? 44,
     decoration: BoxDecoration(

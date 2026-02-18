@@ -29,22 +29,3 @@ class HeaderActionButton extends StatelessWidget {
     );
   }
 }
-
-// Widget _buildActionButton({
-//   required Icon icon,
-//   required VoidCallback onTap,
-//   required BuildContext context,
-// }) {
-//   return GestureDetector(
-//     onTap: onTap,
-//     child: Container(
-//       width: 44,
-//       height: 44,
-//       decoration: BoxDecoration(
-//         shape: BoxShape.circle,
-//         border: Border.all(color: context.border),
-//       ),
-//       child: icon,
-//     ),
-//   );
-// }

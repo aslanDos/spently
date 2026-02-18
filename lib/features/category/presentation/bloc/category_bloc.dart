@@ -41,7 +41,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   ) async {
     emit(CategoryLoading());
 
-    final existing = await _getCategories(null);
+    final existing = await _getCategories(GetCategoriesParams());
 
     await existing.fold((failure) async => emit(CategoryError(failure.msg)), (
       categories,
@@ -52,7 +52,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         await _seedDefaultCategories(NoParams());
       }
 
-      final result = await _getCategories(event.type);
+      final result = await _getCategories(
+        GetCategoriesParams(type: event.type),
+      );
 
       result.fold((failure) => emit(CategoryError(failure.msg)), (loaded) {
         print("After load: ${loaded.length}");
@@ -77,7 +79,15 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   ) async {
     emit(CategoryLoading());
 
-    final result = await _createCategory(event.category);
+    final result = await _createCategory(
+      CreateCategoryParams(
+        name: event.name,
+        type: event.type,
+        icon: event.icon,
+        color: event.color,
+        order: event.order,
+      ),
+    );
 
     result.fold(
       (failure) => emit(CategoryError(failure.msg)),

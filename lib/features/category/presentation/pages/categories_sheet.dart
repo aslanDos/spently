@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spently/core/constants/app_colors.dart';
 import 'package:spently/core/constants/app_sizes.dart';
+import 'package:spently/core/shared/enums/transaction_type/app_transaction_type.dart';
+import 'package:spently/core/shared/widgets/type_toggle_widget.dart';
 import 'package:spently/features/category/domain/entities/category_entity.dart';
 import 'package:spently/features/category/presentation/bloc/category_bloc.dart';
 import 'package:spently/features/category/presentation/bloc/category_event.dart';
 import 'package:spently/features/category/presentation/bloc/category_state.dart';
 import 'package:spently/features/category/presentation/widgets/category_card_widget.dart';
 import 'package:spently/features/category/presentation/widgets/category_header_widget.dart';
-import 'package:spently/features/category/presentation/widgets/type_toggle_widget.dart';
 
 class CategoriesSheet extends StatefulWidget {
   const CategoriesSheet({super.key});
 
   static Future<bool?> show(BuildContext context) {
-    final categoryBloc = context.read<CategoryBloc>();
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -22,10 +22,7 @@ class CategoriesSheet extends StatefulWidget {
       enableDrag: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
-      builder: (context) => BlocProvider.value(
-        value: categoryBloc,
-        child: const CategoriesSheet(),
-      ),
+      builder: (context) => const CategoriesSheet(),
     );
   }
 
@@ -34,7 +31,7 @@ class CategoriesSheet extends StatefulWidget {
 }
 
 class _CategoriesSheetState extends State<CategoriesSheet> {
-  bool isExpense = true;
+  TransactionType selectedType = TransactionType.income;
 
   void _closeSheet() {
     Navigator.of(context).pop();
@@ -71,18 +68,26 @@ class _CategoriesSheetState extends State<CategoriesSheet> {
                   ),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     buildCategoryHeader(onClose: _closeSheet, context: context),
 
                     /// Type toggle
                     TypeToggle(
-                      isExpense: isExpense,
+                      selected: selectedType,
+                      items: const [
+                        TransactionType.income,
+                        TransactionType.expense,
+                      ],
                       onChanged: (value) {
                         setState(() {
-                          isExpense = value;
+                          selectedType = value;
                         });
                       },
                     ),
+
+                    SizedBox(height: 20),
+
                     _buildContent(context, state, scrollcontroller),
                   ],
                 ),
@@ -107,7 +112,7 @@ class _CategoriesSheetState extends State<CategoriesSheet> {
       return const SizedBox();
     }
 
-    final categories = isExpense
+    final categories = selectedType == TransactionType.expense
         ? state.expenseCategories
         : state.incomeCategories;
 
@@ -126,7 +131,7 @@ class _CategoriesSheetState extends State<CategoriesSheet> {
           final state = context.read<CategoryBloc>().state;
 
           if (state is CategoriesLoaded) {
-            final list = isExpense
+            final list = selectedType == TransactionType.expense
                 ? List<CategoryEntity>.from(state.expenseCategories)
                 : List<CategoryEntity>.from(state.incomeCategories);
 
@@ -136,18 +141,15 @@ class _CategoriesSheetState extends State<CategoriesSheet> {
             context.read<CategoryBloc>().add(ReorderCategoriesEvent(list));
           }
         },
+        proxyDecorator: (child, index, animation) => child,
         itemBuilder: (BuildContext context, int index) {
           final category = categories[index];
-          return Container(
+          return Column(
             key: ValueKey(category.id),
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              color: context.surface,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: context.border),
-            ),
-            child: CategoryCard(category: category, index: index),
+            children: [
+              CategoryCard(category: category, index: index),
+              const SizedBox(height: 5),
+            ],
           );
         },
       ),

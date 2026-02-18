@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:spently/core/shared/mappers/app_icon_mapper.dart';
 import 'package:spently/features/account/domain/entities/account_entity.dart';
 
 Widget buildAccountCard({
@@ -25,8 +26,8 @@ Widget buildAccountCard({
               shape: BoxShape.circle,
               color: Colors.green.withValues(alpha: .2),
             ),
-            child: const Icon(
-              CupertinoIcons.building_2_fill,
+            child: Icon(
+              AppIconMapper.fromString(account.icon.toString()).icon(context),
               color: Colors.green,
               size: 22,
             ),

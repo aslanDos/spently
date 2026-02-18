@@ -28,12 +28,22 @@ class LoadCategoriesEvent extends CategoryEvent {
 }
 
 class CreateCategoryEvent extends CategoryEvent {
-  final CategoryEntity category;
+  final String name;
+  final CategoryType type;
+  final String icon;
+  final String color;
+  final int order;
 
-  const CreateCategoryEvent({required this.category});
+  const CreateCategoryEvent({
+    required this.name,
+    required this.type,
+    required this.icon,
+    required this.color,
+    required this.order,
+  });
 
   @override
-  List<Object?> get props => [category];
+  List<Object?> get props => [name, type, icon, color, order];
 }
 
 class UpdateCategoryEvent extends CategoryEvent {

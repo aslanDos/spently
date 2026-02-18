@@ -33,4 +33,9 @@ class AppIcons {
 
     return isIOS ? CupertinoIcons.arrow_down_right : Icons.south_east;
   }
+
+  static IconData arrowUpArrowDown(BuildContext context) {
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    return isIos ? CupertinoIcons.arrow_up_arrow_down : Icons.swap_horiz;
+  }
 }

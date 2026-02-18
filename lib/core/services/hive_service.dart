@@ -1,11 +1,14 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:spently/core/shared/enums/category_type/app_category_type.dart';
+import 'package:spently/core/shared/enums/transaction_type/app_transaction_type.dart';
 import 'package:spently/features/account/data/models/account_model.dart';
 import 'package:spently/features/category/data/models/category_model.dart';
+import 'package:spently/features/transaction/data/models/transaction_model.dart';
 
 class HiveService {
   static final String accountsBox = 'accounts';
   static const String categoriesBox = 'categories';
+  static const String transactionBox = 'transactions';
 
   Future<void> init() async {
     await Hive.initFlutter();
@@ -20,6 +23,12 @@ class HiveService {
     }
     if (!Hive.isAdapterRegistered(2)) {
       Hive.registerAdapter<CategoryType>(CategoryTypeAdapter());
+    }
+    if (!Hive.isAdapterRegistered(3)) {
+      Hive.registerAdapter<TransactionModel>(TransactionModelAdapter());
+    }
+    if (!Hive.isAdapterRegistered(4)) {
+      Hive.registerAdapter<TransactionType>(TransactionTypeAdapter());
     }
   }
 

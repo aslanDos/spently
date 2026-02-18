@@ -7,15 +7,12 @@ import 'package:spently/features/account/presentation/bloc/account_event.dart';
 import 'package:spently/features/account/presentation/bloc/account_state.dart';
 import 'package:spently/features/account/presentation/widgets/account_card.dart';
 import 'package:spently/features/account/presentation/widgets/account_header.dart';
-import 'package:spently/features/category/presentation/bloc/category_bloc.dart';
 import 'package:spently/features/category/presentation/pages/categories_sheet.dart';
 
 class AccountsSheet extends StatefulWidget {
   const AccountsSheet({super.key});
 
   static Future<bool?> show(BuildContext context) {
-    final accountBloc = context.read<AccountBloc>();
-    final categoryBloc = context.read<CategoryBloc>();
     return showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -23,13 +20,7 @@ class AccountsSheet extends StatefulWidget {
       enableDrag: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
-      builder: (_) => MultiBlocProvider(
-        providers: [
-          BlocProvider.value(value: accountBloc),
-          BlocProvider.value(value: categoryBloc),
-        ],
-        child: const AccountsSheet(),
-      ),
+      builder: (_) => const AccountsSheet(),
     );
   }
 

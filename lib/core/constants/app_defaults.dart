@@ -1,10 +1,27 @@
 import 'package:spently/core/shared/enums/category_type/app_category_type.dart';
+import 'package:spently/core/shared/enums/icon_type/app_icon_type.dart';
+import 'package:spently/features/account/data/models/account_model.dart';
 import 'package:spently/features/category/data/models/category_model.dart';
 import 'package:uuid/uuid.dart';
 
 class AppDefaults {
   final Uuid uuid;
   AppDefaults({required this.uuid});
+
+  AccountModel getDefaultAccount() {
+    final now = DateTime.now();
+    return AccountModel(
+      id: uuid.v4(),
+      name: 'Card',
+      balance: 0.0,
+      currency: 'KZT',
+      icon: AppIconType.card.name,
+      color: '4DAF90',
+      isDefault: true,
+      createdAt: now,
+      updatedAt: now,
+    );
+  }
 
   List<CategoryModel> getDefaultCategories() {
     final now = DateTime.now();

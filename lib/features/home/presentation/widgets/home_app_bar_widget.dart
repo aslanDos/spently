@@ -30,7 +30,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
           child: BlocBuilder<AccountBloc, AccountState>(
             builder: (context, state) {
               if (state is AccountsLoaded) {
-                return AccountCapsule(account: state.selectedAccount);
+                return AccountCapsule(
+                  selectedAccount: state.selectedAccount,
+                  onAccountSelected: (_) {},
+                );
               }
 
               return const SizedBox.shrink();

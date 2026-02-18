@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spently/core/constants/app_colors.dart';
 import 'package:spently/features/category/domain/entities/category_entity.dart';
 import 'package:spently/features/category/presentation/widgets/category_icon_chip.dart';
 
@@ -9,25 +10,34 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Icon
-        buildCategoryIconChip(context: context, category: category),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: context.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: context.border),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Icon
+          buildCategoryIconChip(context: context, category: category),
 
-        // Title
-        Expanded(
-          child: Text(
-            category.name,
-            style: Theme.of(context).textTheme.bodyLarge,
+          // Title
+          Expanded(
+            child: Text(
+              category.name,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
-        ),
 
-        // Drag Handler
-        ReorderableDragStartListener(
-          index: index,
-          child: const Icon(Icons.drag_indicator, color: Colors.grey),
-        ),
-      ],
+          // Drag Handler
+          ReorderableDragStartListener(
+            index: index,
+            child: const Icon(Icons.drag_indicator, color: Colors.grey),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:spently/core/shared/enums/icon_type/app_icon_type.dart';
+import 'package:spently/core/constants/app_defaults.dart';
 import 'package:uuid/uuid.dart';
 import 'package:spently/core/errors/failures.dart';
 import 'package:spently/features/account/data/data_source/account_local_data_source.dart';
@@ -109,27 +109,9 @@ class AccountRepositoryImpl implements AccountRepository {
         return const Right(null);
       }
 
-      final now = DateTime.now();
-      final defaultAccounts = [
-        AccountModel(
-          id: _uuid.v4(),
-          name: 'Card',
-          balance: 0.7,
-          currency: 'KZT',
-          icon: AppIconType.card.name,
-          color: '4DAF90',
-          isDefault: true,
-          createdAt: now,
-          updatedAt: now,
-        ),
-      ];
+      final defaultAccount = AppDefaults(uuid: _uuid).getDefaultAccount();
 
-      // Try to save locally (ignore errors)
-      try {
-        await _localDataSource.saveAccounts(defaultAccounts);
-      } catch (_) {
-        // Ignore local storage errors for now
-      }
+      await _localDataSource.saveAccount(defaultAccount);
 
       return const Right(null);
     } catch (e) {
