@@ -1,4 +1,9 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:spently/core/shared/enums/icon_type/app_icon_type.dart';
+import 'package:spently/core/shared/mappers/app_color_mappers.dart';
 
 class AccountEntity extends Equatable {
   final String id;
@@ -8,6 +13,7 @@ class AccountEntity extends Equatable {
   final String? icon;
   final String? color;
   final bool isDefault;
+  final int order;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -19,6 +25,7 @@ class AccountEntity extends Equatable {
     this.icon,
     this.color,
     this.isDefault = false,
+    this.order = 0,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -31,6 +38,7 @@ class AccountEntity extends Equatable {
     String? icon,
     String? color,
     bool? isDefault,
+    int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -42,6 +50,7 @@ class AccountEntity extends Equatable {
       icon: icon ?? this.icon,
       color: color ?? this.color,
       isDefault: isDefault ?? this.isDefault,
+      order: order ?? this.order,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -56,7 +65,17 @@ class AccountEntity extends Equatable {
     icon,
     color,
     isDefault,
+    order,
     createdAt,
     updatedAt,
   ];
+}
+
+extension AccountIconX on AccountEntity {
+  AppIconType get iconType =>
+      icon != null ? AppIconType.fromString(icon!) : AppIconType.wallet;
+}
+
+extension AccountColorX on AccountEntity {
+  Color get backgroundColor => color != null ? color!.toColor() : Colors.grey;
 }

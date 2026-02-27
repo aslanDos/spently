@@ -1,13 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:spently/core/shared/enums/category_type/app_category_type.dart';
+import 'package:spently/core/shared/enums/icon_type/app_icon_type.dart';
+import 'package:spently/core/shared/mappers/app_color_mappers.dart';
 
 class CategoryEntity extends Equatable {
   final String id;
   final String name;
   final CategoryType type;
-  final String icon;
-  final String color;
+  final String? icon;
+  final String? color;
   final bool isDefault;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -66,4 +71,13 @@ class CategoryEntity extends Equatable {
     order,
     isVisible,
   ];
+}
+
+extension CategoryIconX on CategoryEntity {
+  AppIconType get iconType =>
+      icon != null ? AppIconType.fromString(icon!) : AppIconType.piggyBank;
+}
+
+extension CategoryColorX on CategoryEntity {
+  Color get backgroundColor => color != null ? color!.toColor() : Colors.grey;
 }

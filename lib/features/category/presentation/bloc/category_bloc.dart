@@ -46,8 +46,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     await existing.fold((failure) async => emit(CategoryError(failure.msg)), (
       categories,
     ) async {
-      print("Before seed: ${categories.length}");
-
       if (categories.isEmpty) {
         await _seedDefaultCategories(NoParams());
       }
@@ -57,7 +55,6 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       );
 
       result.fold((failure) => emit(CategoryError(failure.msg)), (loaded) {
-        print("After load: ${loaded.length}");
         emit(CategoriesLoaded(loaded));
       });
     });

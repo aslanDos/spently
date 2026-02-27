@@ -8,7 +8,6 @@ class TransactionEntity extends Equatable {
   final double amount;
   final TransactionType type;
   final DateTime date;
-  final List<String> tags;
   final String? note;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -21,7 +20,6 @@ class TransactionEntity extends Equatable {
     required this.type,
     required this.date,
     this.note,
-    this.tags = const [],
     required this.createdAt,
     required this.updatedAt,
   });
@@ -33,7 +31,6 @@ class TransactionEntity extends Equatable {
     double? amount,
     TransactionType? type,
     DateTime? date,
-    List<String>? tags,
     String? note,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -45,7 +42,6 @@ class TransactionEntity extends Equatable {
       amount: amount ?? this.amount,
       type: type ?? this.type,
       date: date ?? this.date,
-      tags: tags ?? this.tags,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -61,7 +57,6 @@ class TransactionEntity extends Equatable {
     type,
     date,
     note,
-    tags,
     createdAt,
     updatedAt,
   ];

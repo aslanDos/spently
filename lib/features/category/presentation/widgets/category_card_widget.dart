@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spently/core/constants/app_colors.dart';
+import 'package:spently/core/extensions/build_context_ext.dart';
 import 'package:spently/features/category/domain/entities/category_entity.dart';
 import 'package:spently/features/category/presentation/widgets/category_icon_chip.dart';
 

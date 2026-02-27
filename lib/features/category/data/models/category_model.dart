@@ -20,11 +20,11 @@ class CategoryModel extends CategoryEntity {
 
   @override
   @HiveField(3)
-  final String icon;
+  final String? icon;
 
   @override
   @HiveField(4)
-  final String color;
+  final String? color;
 
   @override
   @HiveField(5)

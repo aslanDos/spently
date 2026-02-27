@@ -55,11 +55,11 @@ class TypeToggle extends StatelessWidget {
   IconData _iconForType(TransactionType type, BuildContext context) {
     switch (type) {
       case TransactionType.income:
-        return AppIcons.arrowUpleft(context);
+        return AppIcons.arrowUpleft;
       case TransactionType.expense:
-        return AppIcons.arrowDownRight(context);
+        return AppIcons.arrowDownRight;
       case TransactionType.transfer:
-        return AppIcons.arrowUpArrowDown(context);
+        return AppIcons.arrowUpDown;
     }
   }
 

@@ -1,8 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:spently/core/constants/app_colors.dart';
-import 'package:spently/core/constants/app_sizes.dart';
+import 'package:spently/core/constants/app_icon_sizes.dart';
+import 'package:spently/core/constants/app_radius.dart';
+import 'package:spently/core/constants/app_spacing.dart';
+import 'package:spently/core/extensions/build_context_ext.dart';
+import 'package:spently/core/shared/icons/app_icons.dart';
+import 'package:spently/core/utils/date_formatter.dart';
 
 class DatePicker extends StatefulWidget {
   final DateTime selectedDate;
@@ -26,41 +30,30 @@ class _DatePickerWidgetState extends State<DatePicker> {
     return GestureDetector(
       onTap: _pickDate,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 9),
+        height: 60,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.spacing12,
+          vertical: AppSpacing.spacing8,
+        ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppSizes.radiusTwoXLarge),
-          border: Border.all(color: context.border),
+          color: context.colorScheme.secondary.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(AppRadius.radius24),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(CupertinoIcons.calendar, size: 24),
-            SizedBox(width: 6),
-            Text(_formatSelectedDate()),
+            Icon(
+              AppIcons.calendar,
+              size: AppIconSizes.medium,
+              color: context.primary,
+            ),
+            const SizedBox(width: AppSpacing.spacing8),
+            Text(DateFormatter.formatRelative(widget.selectedDate)),
           ],
         ),
       ),
     );
-  }
-
-  String _formatSelectedDate() {
-    final now = DateTime.now();
-
-    if (_isSameDay(widget.selectedDate, now)) {
-      return 'Today';
-    }
-
-    final yesterday = now.subtract(const Duration(days: 1));
-    if (_isSameDay(widget.selectedDate, yesterday)) {
-      return 'Yesterday';
-    }
-
-    return "${widget.selectedDate.day}.${widget.selectedDate.month}.${widget.selectedDate.year}";
-  }
-
-  bool _isSameDay(DateTime a, DateTime b) {
-    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   void _pickDate() {

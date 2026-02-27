@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spently/core/constants/app_colors.dart';
-import 'package:spently/core/constants/app_sizes.dart';
 import 'package:spently/core/shared/enums/transaction_type/app_transaction_type.dart';
+import 'package:spently/core/shared/widgets/app_sheet.dart';
 import 'package:spently/core/shared/widgets/type_toggle_widget.dart';
 import 'package:spently/features/category/domain/entities/category_entity.dart';
 import 'package:spently/features/category/presentation/bloc/category_bloc.dart';
@@ -15,14 +14,12 @@ class CategoriesSheet extends StatefulWidget {
   const CategoriesSheet({super.key});
 
   static Future<bool?> show(BuildContext context) {
-    return showModalBottomSheet<bool>(
+    return AppSheet.show(
       context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black54,
-      builder: (context) => const CategoriesSheet(),
+      child: const CategoriesSheet(),
+      initialChildSize: 0.9,
+      minChildSize: 0.9,
+      maxChildSize: 0.9,
     );
   }
 
@@ -39,71 +36,47 @@ class _CategoriesSheetState extends State<CategoriesSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.5,
-      maxChildSize: 0.9,
-      builder: (context, scrollcontroller) {
-        return BlocConsumer<CategoryBloc, CategoryState>(
-          listener: (context, state) {
-            if (state is CategoryDeleted ||
-                state is CategoryCreated ||
-                state is CategoryUpdated) {
-              context.read<CategoryBloc>().add(LoadCategoriesEvent());
-            } else if (state is CategoryError) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.message)));
-            }
-          },
-          builder: (context, state) {
-            return GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: context.surface,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(AppSizes.radiusTwoXLarge),
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    buildCategoryHeader(onClose: _closeSheet, context: context),
+    return BlocConsumer<CategoryBloc, CategoryState>(
+      listener: (context, state) {
+        if (state is CategoryDeleted ||
+            state is CategoryCreated ||
+            state is CategoryUpdated) {
+          context.read<CategoryBloc>().add(LoadCategoriesEvent());
+        } else if (state is CategoryError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        return Column(
+          children: [
+            buildCategoryHeader(onClose: _closeSheet, context: context),
 
-                    /// Type toggle
-                    TypeToggle(
-                      selected: selectedType,
-                      items: const [
-                        TransactionType.income,
-                        TransactionType.expense,
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          selectedType = value;
-                        });
-                      },
-                    ),
+            /// Type toggle
+            TypeToggle(
+              selected: selectedType,
+              items: const [
+                TransactionType.income,
+                TransactionType.expense,
+              ],
+              onChanged: (value) {
+                setState(() {
+                  selectedType = value;
+                });
+              },
+            ),
 
-                    SizedBox(height: 20),
+            SizedBox(height: 20),
 
-                    _buildContent(context, state, scrollcontroller),
-                  ],
-                ),
-              ),
-            );
-          },
+            _buildContent(context, state),
+          ],
         );
       },
     );
   }
 
-  Widget _buildContent(
-    BuildContext context,
-    CategoryState state,
-    ScrollController scrollController,
-  ) {
+  Widget _buildContent(BuildContext context, CategoryState state) {
     if (state is CategoryLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -117,12 +90,11 @@ class _CategoriesSheetState extends State<CategoriesSheet> {
         : state.incomeCategories;
 
     if (categories.isEmpty) {
-      return const Center(child: Text("Нет категорий"));
+      return const Center(child: Text("No categories"));
     }
 
     return Expanded(
       child: ReorderableListView.builder(
-        scrollController: scrollController,
         itemCount: categories.length,
         buildDefaultDragHandles: false,
         onReorder: (oldIndex, newIndex) {

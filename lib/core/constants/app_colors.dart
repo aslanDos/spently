@@ -8,121 +8,88 @@ abstract final class AppColorScheme {
     primary: AppColors.primary,
     onPrimary: AppColors.onPrimary,
 
-    secondary: AppColors.neutral800,
-    onSecondary: AppColors.neutral0,
+    secondary: AppColors.gray,
+    onSecondary: AppColors.white,
 
     // === ERROR ===
-    error: AppColors.neutral900,
-    onError: AppColors.neutral0,
+    error: AppColors.error,
+    onError: AppColors.white,
 
     // === SURFACE ===
-    surface: AppColors.surfaceLight,
-    onSurface: AppColors.textPrimaryLight,
+    surface: AppColors.white,
+    onSurface: AppColors.charcoal,
 
-    outline: AppColors.neutral200,
-    outlineVariant: AppColors.neutral100,
+    outline: AppColors.grayLight,
+    outlineVariant: AppColors.gray,
 
     shadow: Colors.black12,
     scrim: Colors.black38,
 
-    inverseSurface: AppColors.neutral900,
-    onInverseSurface: AppColors.neutral0,
-    inversePrimary: AppColors.neutral800,
+    inverseSurface: AppColors.charcoal,
+    onInverseSurface: AppColors.white,
+    inversePrimary: AppColors.gray,
   );
 
   static const ColorScheme dark = ColorScheme(
     brightness: Brightness.dark,
 
     // === BRAND ===
-    primary: AppColors.neutral0,
-    onPrimary: AppColors.neutral900,
+    primary: AppColors.white,
+    onPrimary: AppColors.charcoal,
 
-    secondary: AppColors.neutral300,
-    onSecondary: AppColors.neutral900,
+    secondary: AppColors.grayLight,
+    onSecondary: AppColors.charcoal,
 
     // === ERROR ===
-    error: AppColors.neutral0,
-    onError: AppColors.neutral900,
+    error: AppColors.white,
+    onError: AppColors.charcoal,
 
     // === SURFACE ===
-    surface: AppColors.surfaceDark,
-    onSurface: AppColors.textPrimaryDark,
+    surface: AppColors.charcoal,
+    onSurface: AppColors.white,
 
-    outline: AppColors.neutral700,
-    outlineVariant: AppColors.neutral800,
+    outline: AppColors.gray,
+    outlineVariant: AppColors.grayLight,
 
     shadow: Colors.black54,
     scrim: Colors.black87,
 
-    inverseSurface: AppColors.neutral0,
-    onInverseSurface: AppColors.neutral900,
-    inversePrimary: AppColors.neutral200,
+    inverseSurface: AppColors.white,
+    onInverseSurface: AppColors.charcoal,
+    inversePrimary: AppColors.gray,
   );
 }
 
-abstract final class AppColors {
-  // ===== PRIMARY (черный как бренд) =====
-  static const Color primary = Color(0xFF000000);
-  static const Color onPrimary = Color(0xFFFFFFFF);
+sealed class AppColors {
+  // ===== CORE PALETTE (Salt & Pepper) =====
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color grayLight = Color(0xFFD4D4D4);
+  static const Color gray = Color(0xFFB3B3B3);
+  static const Color charcoal = Color(0xFF2B2B2B);
 
-  // ===== GRAYSCALE SCALE =====
-  static const Color neutral0 = Color(0xFFFFFFFF);
-  static const Color neutral50 = Color(0xFFF5F5F5);
-  static const Color neutral100 = Color(0xFFEAEAEA);
-  static const Color neutral200 = Color(0xFFD6D6D6);
-  static const Color neutral300 = Color(0xFFBDBDBD);
-  static const Color neutral400 = Color(0xFF9E9E9E);
-  static const Color neutral500 = Color(0xFF757575);
-  static const Color neutral600 = Color(0xFF616161);
-  static const Color neutral700 = Color(0xFF424242);
-  static const Color neutral800 = Color(0xFF212121);
-  static const Color neutral900 = Color(0xFF111111);
+  // ===== BRAND =====
+  static const Color primary = charcoal;
+  static const Color onPrimary = white;
 
   // ===== BACKGROUNDS =====
-  static const Color backgroundLight = neutral50;
-  static const Color backgroundDark = neutral900;
+  static const Color backgroundLight = white;
+  static const Color backgroundDark = charcoal;
 
   // ===== SURFACES =====
-  static const Color surfaceLight = neutral0;
-  static const Color surfaceDark = neutral800;
+  static const Color surfaceLight = white;
+  static const Color surfaceDark = charcoal;
 
   // ===== TEXT =====
-  static const Color textPrimaryLight = neutral900;
-  static const Color textSecondaryLight = neutral600;
+  static const Color textPrimaryLight = charcoal;
+  static const Color textSecondaryLight = gray;
 
-  static const Color textPrimaryDark = neutral0;
-  static const Color textSecondaryDark = neutral300;
+  static const Color textPrimaryDark = white;
+  static const Color textSecondaryDark = grayLight;
 
   // ===== STATUS =====
-  static const Color success = Color.fromARGB(255, 50, 255, 122);
-  static const Color warning = Color(0xFF000000);
-  static const Color error = Color.fromARGB(255, 255, 55, 55);
+  static const Color success = Color.fromARGB(255, 153, 250, 187);
+  static const Color warning = Color.fromARGB(255, 255, 225, 0);
+  static const Color error = Color.fromARGB(255, 254, 129, 129);
 
   static const Color transparent = Colors.transparent;
-}
-
-extension AppColorContext on BuildContext {
-  ColorScheme get scheme => Theme.of(this).colorScheme;
-
-  // === Brand ===
-  Color get primary => scheme.primary;
-  Color get onPrimary => scheme.onPrimary;
-
-  // === Backgrounds ===
-  Color get surface => scheme.surface;
-
-  // === Text ===
-  Color get textPrimary => scheme.onSurface;
-  Color get textSecondary => scheme.onSurfaceVariant;
-
-  // === Borders / Outline ===
-  Color get border => scheme.outline;
-
-  // === Status ===
-  Color get error => scheme.error;
-  Color get success => scheme.primary;
-  Color get warning => scheme.primary;
-
-  // === Inverse ===
-  Color get inverseSurface => scheme.inverseSurface;
 }

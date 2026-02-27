@@ -24,6 +24,10 @@ void main() async {
   await hiveService.init();
   hiveService.registerAdapters();
 
+  // TODO: Remove after migration - clears old data without 'order' field
+  // await hiveService.deleteBox(HiveService.accountsBox);
+  // await hiveService.deleteBox(HiveService.categoriesBox);
+
   await hiveService.openBox<AccountModel>(HiveService.accountsBox);
   await hiveService.openBox<CategoryModel>(HiveService.categoriesBox);
   await hiveService.openBox<TransactionModel>(HiveService.transactionBox);

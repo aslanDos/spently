@@ -24,7 +24,6 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       type: fields[4] as TransactionType,
       date: fields[5] as DateTime,
       note: fields[7] as String?,
-      tags: (fields[6] as List).cast<String>(),
       createdAt: fields[8] as DateTime,
       updatedAt: fields[9] as DateTime,
     );
@@ -33,7 +32,7 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
   @override
   void write(BinaryWriter writer, TransactionModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -46,8 +45,6 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       ..write(obj.type)
       ..writeByte(5)
       ..write(obj.date)
-      ..writeByte(6)
-      ..write(obj.tags)
       ..writeByte(7)
       ..write(obj.note)
       ..writeByte(8)

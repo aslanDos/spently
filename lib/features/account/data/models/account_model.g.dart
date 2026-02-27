@@ -24,6 +24,7 @@ class AccountModelAdapter extends TypeAdapter<AccountModel> {
       icon: fields[5] as String?,
       color: fields[6] as String?,
       isDefault: fields[7] as bool,
+      order: fields[10] as int,
       createdAt: fields[8] as DateTime,
       updatedAt: fields[9] as DateTime,
     );
@@ -32,7 +33,7 @@ class AccountModelAdapter extends TypeAdapter<AccountModel> {
   @override
   void write(BinaryWriter writer, AccountModel obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,6 +48,8 @@ class AccountModelAdapter extends TypeAdapter<AccountModel> {
       ..write(obj.color)
       ..writeByte(7)
       ..write(obj.isDefault)
+      ..writeByte(10)
+      ..write(obj.order)
       ..writeByte(8)
       ..write(obj.createdAt)
       ..writeByte(9)

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:spently/core/errors/failures.dart';
 import 'package:spently/core/shared/enums/transaction_type/app_transaction_type.dart';
-import 'package:spently/features/account/domain/repository/account_repostiory.dart';
+import 'package:spently/features/account/domain/repository/account_repository.dart';
 import 'package:spently/features/transaction/data/data_source/transaction_local_data_source.dart';
 import 'package:spently/features/transaction/data/models/transaction_model.dart';
 import 'package:spently/features/transaction/domain/entities/transaction_entity.dart';

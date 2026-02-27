@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:spently/core/constants/app_colors.dart';
+import 'package:spently/core/constants/app_radius.dart';
 import 'package:spently/core/constants/app_sizes.dart';
 import 'package:spently/core/constants/app_text_styles.dart';
+import 'package:spently/core/extensions/build_context_ext.dart';
 
 class BalanceInfo extends StatelessWidget {
   const BalanceInfo({super.key});
@@ -45,7 +47,7 @@ class BalanceInfo extends StatelessWidget {
             color: isIncome
                 ? AppColors.success.withValues(alpha: 0.4)
                 : AppColors.error.withValues(alpha: 0.4),
-            borderRadius: BorderRadius.circular(AppSizes.radiusTwoXLarge),
+            borderRadius: BorderRadius.circular(AppRadius.radius24),
           ),
           child: Icon(
             isIncome
@@ -75,7 +77,7 @@ class BalanceInfo extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
             color: context.border,
-            borderRadius: BorderRadius.circular(AppSizes.radiusTwoXLarge),
+            borderRadius: BorderRadius.circular(AppRadius.radius24),
           ),
           child: Row(
             children: [

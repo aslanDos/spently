@@ -22,7 +22,7 @@ class HeaderActionButton extends StatelessWidget {
         height: size?.toDouble(),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: context.border),
+          border: Border.all(color: AppColors.gray),
         ),
         child: icon,
       ),

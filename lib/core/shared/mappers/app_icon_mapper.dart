@@ -1,68 +1,301 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:spently/core/shared/enums/icon_type/app_icon_type.dart';
 
 extension AppIconMapper on AppIconType {
-  IconData icon(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
+  IconData get icon {
     switch (this) {
-      case AppIconType.add:
-        return isIOS ? CupertinoIcons.add : Icons.add;
-      case AppIconType.bank:
-        return isIOS ? CupertinoIcons.building_2_fill : Icons.account_balance;
-
+      // ===== FINANCE =====
       case AppIconType.wallet:
-        return isIOS ? CupertinoIcons.wand_rays : Icons.account_balance_wallet;
+        return LucideIcons.wallet;
+      case AppIconType.walletMinimal:
+        return LucideIcons.walletMinimal;
+      case AppIconType.walletCards:
+        return LucideIcons.walletCards;
+      case AppIconType.piggyBank:
+        return LucideIcons.piggyBank;
+      case AppIconType.landmark:
+        return LucideIcons.landmark;
+      case AppIconType.scale:
+        return LucideIcons.scale;
+      case AppIconType.receipt:
+        return LucideIcons.receipt;
+      case AppIconType.chartCandleStick:
+        return LucideIcons.chartCandlestick;
+      case AppIconType.banknote:
+        return LucideIcons.banknote;
+      case AppIconType.currency:
+        return LucideIcons.badgeDollarSign;
+      case AppIconType.dollarSign:
+        return LucideIcons.dollarSign;
+      case AppIconType.gem:
+        return LucideIcons.gem;
+      case AppIconType.handCoins:
+        return LucideIcons.coins;
+      case AppIconType.handShake:
+        return LucideIcons.handshake;
+      case AppIconType.buisnessCase:
+        return LucideIcons.briefcaseBusiness;
 
-      case AppIconType.card:
-        return isIOS ? CupertinoIcons.creditcard_fill : Icons.credit_card;
+      // ===== FOOD =====
+      case AppIconType.apple:
+        return LucideIcons.apple;
+      case AppIconType.banana:
+        return LucideIcons.banana;
+      case AppIconType.bean:
+        return LucideIcons.bean;
+      case AppIconType.beef:
+        return LucideIcons.beef;
+      case AppIconType.beer:
+        return LucideIcons.beer;
+      case AppIconType.bearOff:
+        return LucideIcons.beerOff;
+      case AppIconType.bottleWine:
+        return LucideIcons.wine;
+      case AppIconType.cake:
+        return LucideIcons.cake;
+      case AppIconType.cakeSlice:
+        return LucideIcons.cakeSlice;
+      case AppIconType.candy:
+        return LucideIcons.candy;
+      case AppIconType.candyCane:
+        return LucideIcons.candyCane;
+      case AppIconType.carrot:
+        return LucideIcons.carrot;
+      case AppIconType.chefHat:
+        return LucideIcons.chefHat;
+      case AppIconType.cherry:
+        return LucideIcons.cherry;
+      case AppIconType.citrus:
+        return LucideIcons.citrus;
+      case AppIconType.coffee:
+        return LucideIcons.coffee;
+      case AppIconType.cookie:
+        return LucideIcons.cookie;
+      case AppIconType.popcorn:
+        return LucideIcons.popcorn;
+      case AppIconType.pizza:
+        return LucideIcons.pizza;
+      case AppIconType.utensils:
+        return LucideIcons.utensils;
 
-      case AppIconType.cash:
-        return isIOS
-            ? CupertinoIcons.money_dollar_circle_fill
-            : Icons.attach_money;
+      // ===== SHOPPING =====
+      case AppIconType.barcode:
+        return LucideIcons.barcode;
+      case AppIconType.bookImage:
+        return LucideIcons.bookImage;
+      case AppIconType.circlePercent:
+        return LucideIcons.circlePercent;
+      case AppIconType.diamondPercent:
+        return LucideIcons.diamondPercent;
+      case AppIconType.handbag:
+        return LucideIcons.shoppingBag;
+      case AppIconType.percent:
+        return LucideIcons.percent;
+      case AppIconType.scan:
+        return LucideIcons.scan;
+      case AppIconType.scanBarcode:
+        return LucideIcons.scanBarcode;
+      case AppIconType.scanLine:
+        return LucideIcons.scanLine;
+      case AppIconType.scanQrCode:
+        return LucideIcons.qrCode;
+      case AppIconType.shirt:
+        return LucideIcons.shirt;
+      case AppIconType.shoppingBag:
+        return LucideIcons.shoppingBag;
+      case AppIconType.shoppingBasket:
+        return LucideIcons.shoppingBasket;
+      case AppIconType.shoppingCart:
+        return LucideIcons.shoppingCart;
+      case AppIconType.squarePercent:
+        return LucideIcons.squarePercent;
+      case AppIconType.store:
+        return LucideIcons.store;
 
-      case AppIconType.crypto:
-        return isIOS
-            ? CupertinoIcons.bitcoin_circle_fill
-            : Icons.currency_bitcoin;
+      // ===== TRANSPORT =====
+      case AppIconType.car:
+        return LucideIcons.car;
+      case AppIconType.bus:
+        return LucideIcons.bus;
+      case AppIconType.trainFront:
+        return LucideIcons.trainFront;
+      case AppIconType.plane:
+        return LucideIcons.plane;
+      case AppIconType.ship:
+        return LucideIcons.ship;
+      case AppIconType.motorbike:
+        return LucideIcons.bike;
+      case AppIconType.fuel:
+        return LucideIcons.fuel;
+      case AppIconType.evCharger:
+        return LucideIcons.evCharger;
+      case AppIconType.circleParking:
+        return LucideIcons.circleParking;
+      case AppIconType.trafficCone:
+        return LucideIcons.trafficCone;
+      case AppIconType.tractor:
+        return LucideIcons.tractor;
+      case AppIconType.ticket:
+        return LucideIcons.ticket;
+      case AppIconType.ticketsPlane:
+        return LucideIcons.ticketsPlane;
+      case AppIconType.luggage:
+        return LucideIcons.luggage;
+      case AppIconType.briefcase:
+        return LucideIcons.briefcase;
 
-      case AppIconType.savings:
-        return isIOS ? CupertinoIcons.archivebox_fill : Icons.savings;
-
-      case AppIconType.investment:
-        return isIOS ? CupertinoIcons.chart_bar_fill : Icons.show_chart;
-
-      case AppIconType.business:
-        return isIOS ? CupertinoIcons.briefcase_fill : Icons.business;
-
-      case AppIconType.shopping:
-        return isIOS ? CupertinoIcons.cart_fill : Icons.shopping_cart;
-
-      case AppIconType.food:
-        return isIOS ? CupertinoIcons.bag_fill : Icons.restaurant;
-
-      case AppIconType.transport:
-        return isIOS ? CupertinoIcons.car_fill : Icons.directions_car;
-
-      case AppIconType.health:
-        return isIOS ? CupertinoIcons.heart_fill : Icons.favorite;
-
-      case AppIconType.education:
-        return isIOS ? CupertinoIcons.book_fill : Icons.school;
-
+      // ===== HOME =====
+      case AppIconType.house:
+        return LucideIcons.house;
+      case AppIconType.houseHeart:
+        return LucideIcons.houseHeart;
+      case AppIconType.housePlug:
+        return LucideIcons.housePlug;
+      case AppIconType.houseWifi:
+        return LucideIcons.houseWifi;
+      case AppIconType.bedDouble:
+        return LucideIcons.bedDouble;
+      case AppIconType.sofa:
+        return LucideIcons.sofa;
+      case AppIconType.armchair:
+        return LucideIcons.armchair;
+      case AppIconType.cookingPot:
+        return LucideIcons.cookingPot;
+      case AppIconType.refrigerator:
+        return LucideIcons.refrigerator;
+      case AppIconType.microwave:
+        return LucideIcons.microwave;
+      case AppIconType.showerHead:
+        return LucideIcons.showerHead;
+      case AppIconType.graduationHat:
+        return LucideIcons.graduationCap;
+      case AppIconType.toilet:
+        return LucideIcons.toilet;
+      case AppIconType.washingMachine:
+        return LucideIcons.washingMachine;
+      case AppIconType.lamp:
+        return LucideIcons.lamp;
+      case AppIconType.heater:
+        return LucideIcons.heater;
+      case AppIconType.router:
+        return LucideIcons.router;
+      case AppIconType.solarPanel:
+        return LucideIcons.solarPanel;
+      case AppIconType.hammer:
+        return LucideIcons.hammer;
+      case AppIconType.toolbox:
+        return LucideIcons.toolbox;
       case AppIconType.gift:
-        return isIOS ? CupertinoIcons.gift_fill : Icons.card_giftcard;
+        return LucideIcons.gift;
+      case AppIconType.laptop:
+        return LucideIcons.laptop;
+
+      // ===== SCIENCE =====
+      case AppIconType.activity:
+        return LucideIcons.activity;
+      case AppIconType.atom:
+        return LucideIcons.atom;
+      case AppIconType.beaker:
+        return LucideIcons.beaker;
+      case AppIconType.brain:
+        return LucideIcons.brain;
+      case AppIconType.brainCircuit:
+        return LucideIcons.brainCircuit;
+      case AppIconType.circuitBoard:
+        return LucideIcons.circuitBoard;
+      case AppIconType.flaskConical:
+        return LucideIcons.flaskConical;
+      case AppIconType.microscope:
+        return LucideIcons.microscope;
+      case AppIconType.orbit:
+        return LucideIcons.orbit;
+      case AppIconType.pipette:
+        return LucideIcons.pipette;
+      case AppIconType.radiation:
+        return LucideIcons.radiation;
+      case AppIconType.satellite:
+        return LucideIcons.satellite;
+      case AppIconType.stethoscope:
+        return LucideIcons.stethoscope;
+      case AppIconType.syringe:
+        return LucideIcons.syringe;
+      case AppIconType.telescope:
+        return LucideIcons.telescope;
+
+      // ===== HEALTH =====
+      case AppIconType.ambulance:
+        return LucideIcons.ambulance;
+      case AppIconType.bandage:
+        return LucideIcons.bandage;
+      case AppIconType.bone:
+        return LucideIcons.bone;
+      case AppIconType.briefcaseMedical:
+        return LucideIcons.briefcaseMedical;
+      case AppIconType.dna:
+        return LucideIcons.dna;
+      case AppIconType.heart:
+        return LucideIcons.heart;
+      case AppIconType.heartPulse:
+        return LucideIcons.heartPulse;
+      case AppIconType.hospital:
+        return LucideIcons.hospital;
+      case AppIconType.pill:
+        return LucideIcons.pill;
+      case AppIconType.pillBottle:
+        return LucideIcons.pillBottle;
+      case AppIconType.ribbon:
+        return LucideIcons.ribbon;
+
+      // ===== TRAVEL =====
+      case AppIconType.backpack:
+        return LucideIcons.backpack;
+      case AppIconType.baggageClaim:
+        return LucideIcons.baggageClaim;
+      case AppIconType.bath:
+        return LucideIcons.bath;
+      case AppIconType.binoculars:
+        return LucideIcons.binoculars;
+      case AppIconType.cableCar:
+        return LucideIcons.cableCar;
+      case AppIconType.caravan:
+        return LucideIcons.caravan;
+      case AppIconType.compass:
+        return LucideIcons.compass;
+      case AppIconType.conciergeBell:
+        return LucideIcons.conciergeBell;
+      case AppIconType.helicopter:
+        return LucideIcons.helicopter;
+      case AppIconType.hotel:
+        return LucideIcons.hotel;
+      case AppIconType.mapPin:
+        return LucideIcons.mapPin;
+      case AppIconType.sailboat:
+        return LucideIcons.sailboat;
+      case AppIconType.tent:
+        return LucideIcons.tent;
+      case AppIconType.towerControl:
+        return LucideIcons.towerControl;
+
+      // ===== SPORT =====
+      case AppIconType.award:
+        return LucideIcons.award;
+      case AppIconType.circleStar:
+        return LucideIcons.circleStar;
+      case AppIconType.dumbbell:
+        return LucideIcons.dumbbell;
+      case AppIconType.fishingHook:
+        return LucideIcons.fishingHook;
+      case AppIconType.handFist:
+        return LucideIcons.handFist;
+      case AppIconType.medal:
+        return LucideIcons.medal;
+      case AppIconType.trophy:
+        return LucideIcons.trophy;
+      case AppIconType.volleyball:
+        return LucideIcons.volleyball;
+      case AppIconType.wavesLadder:
+        return LucideIcons.waves;
     }
-  }
-
-  String get value => name;
-
-  static AppIconType fromString(String value) {
-    return AppIconType.values.firstWhere(
-      (e) => e.name == value,
-      orElse: () => AppIconType.wallet,
-    );
   }
 }

@@ -1,6 +1,20 @@
-# spently
+# 💰 Spendly – Personal Finance Tracker
 
-A new Flutter project.
+Spendly is a modular Flutter application for tracking personal finances.
+Built using Clean Architecture and BLoC for scalable and maintainable development.
+
+---
+
+## 🚀 Tech Stack
+
+- Flutter
+- Dart
+- BLoC (flutter_bloc)
+- Clean Architecture
+- Dependency Injection
+- Feature-first folder structure
+
+---
 
 ## Getting Started
 

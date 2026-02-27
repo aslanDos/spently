@@ -1,85 +1,51 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:spently/features/account/domain/entities/account_entity.dart';
 
-abstract class AccountState extends Equatable {
-  const AccountState();
+part 'account_state.freezed.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+@freezed
+class AccountState with _$AccountState {
+  const AccountState._();
 
-class AccountInitial extends AccountState {}
+  const factory AccountState.initial() = AccountInitial;
 
-class AccountLoading extends AccountState {}
+  const factory AccountState.loading({
+    @Default([]) List<AccountEntity> accounts,
+    AccountEntity? selectedAccount,
+  }) = AccountLoading;
 
-class AccountsLoaded extends AccountState {
-  final List<AccountEntity> accounts;
-  final AccountEntity selectedAccount;
+  const factory AccountState.loaded({
+    required List<AccountEntity> accounts,
+    required AccountEntity selectedAccount,
+  }) = AccountsLoaded;
 
-  const AccountsLoaded(this.accounts, this.selectedAccount);
+  const factory AccountState.failure({
+    required String message,
+    @Default([]) List<AccountEntity> accounts,
+    AccountEntity? selectedAccount,
+  }) = AccountFailure;
+
+  // Computed properties available on all states
+  double get totalBalance => accounts.fold(0.0, (sum, a) => sum + a.balance);
 
   AccountEntity? get defaultAccount =>
       accounts.where((a) => a.isDefault).firstOrNull;
 
-  double get totalBalance =>
-      accounts.fold(0.0, (sum, account) => sum + account.balance);
+  // Getters that work across all states
+  List<AccountEntity> get accounts => map(
+        initial: (_) => [],
+        loading: (s) => s.accounts,
+        loaded: (s) => s.accounts,
+        failure: (s) => s.accounts,
+      );
 
-  @override
-  List<Object?> get props => [accounts];
-}
+  AccountEntity? get selectedAccount => mapOrNull(
+        loading: (s) => s.selectedAccount,
+        loaded: (s) => s.selectedAccount,
+        failure: (s) => s.selectedAccount,
+      );
 
-class AccountLoaded extends AccountState {
-  final AccountEntity account;
-
-  const AccountLoaded(this.account);
-
-  @override
-  List<Object?> get props => [account];
-}
-
-class AccountCreated extends AccountState {
-  final AccountEntity account;
-
-  const AccountCreated(this.account);
-
-  @override
-  List<Object?> get props => [account];
-}
-
-class AccountUpdated extends AccountState {
-  final AccountEntity account;
-
-  const AccountUpdated(this.account);
-
-  @override
-  List<Object?> get props => [account];
-}
-
-class AccountDeleted extends AccountState {
-  final String accountId;
-
-  const AccountDeleted(this.accountId);
-
-  @override
-  List<Object?> get props => [accountId];
-}
-
-class AccountBalanceUpdated extends AccountState {
-  final AccountEntity account;
-
-  const AccountBalanceUpdated(this.account);
-
-  @override
-  List<Object?> get props => [account];
-}
-
-class DefaultAccountSeeded extends AccountState {}
-
-class AccountError extends AccountState {
-  final String message;
-
-  const AccountError(this.message);
-
-  @override
-  List<Object?> get props => [message];
+  bool get isLoading => this is AccountLoading;
+  bool get isLoaded => this is AccountsLoaded;
+  bool get hasError => this is AccountFailure;
 }

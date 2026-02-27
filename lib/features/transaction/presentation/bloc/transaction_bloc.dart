@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spently/features/transaction/domain/repository/transaction_repository.dart';
 import 'package:spently/features/transaction/presentation/bloc/transaction_event.dart';
 import 'package:spently/features/transaction/presentation/bloc/transaction_state.dart';
 
@@ -23,7 +22,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
        _createTransaction = createTransaction,
        _updateTransaction = updateTransaction,
        _deleteTransaction = deleteTransaction,
-       super(TransactionInitial()) {
+       super(const TransactionState.initial()) {
     on<LoadTransactionsEvent>(_onLoadTransactions);
     on<LoadTransactionEvent>(_onLoadTransaction);
     on<CreateTransactionEvent>(_onCreateTransaction);
@@ -35,24 +34,18 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     LoadTransactionsEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(TransactionLoading());
+    emit(TransactionState.loading(transactions: state.transactions));
 
     final result = await _getTransactions(
-      GetTransactionsParams(
-        filter: TransactionFilter(
-          startDate: event.startDate,
-          endDate: event.endDate,
-          accountId: event.accountId,
-          categoryId: event.categoryId,
-          type: event.type,
-          tag: event.tag,
-        ),
-      ),
+      GetTransactionsParams(filter: event.filter),
     );
 
     result.fold(
-      (failure) => emit(TransactionError(failure.msg)),
-      (transactions) => emit(TransactionsLoaded(transactions)),
+      (failure) => emit(TransactionState.failure(
+        message: failure.msg,
+        transactions: state.transactions,
+      )),
+      (transactions) => emit(TransactionState.loaded(transactions: transactions)),
     );
   }
 
@@ -60,38 +53,54 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     LoadTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(TransactionLoading());
+    emit(TransactionState.loading(transactions: state.transactions));
+
     final result = await _getTransaction(event.transactionId);
-    result.fold((failure) => emit(TransactionError(failure.msg)), (
-      transaction,
-    ) {
-      if (transaction != null) {
-        emit(TransactionLoaded(transaction));
-      } else {
-        emit(const TransactionError('Transaction not found'));
-      }
-    });
+
+    result.fold(
+      (failure) => emit(TransactionState.failure(
+        message: failure.msg,
+        transactions: state.transactions,
+      )),
+      (transaction) {
+        if (transaction != null) {
+          // Optionally update the transaction in the list
+          emit(TransactionState.loaded(transactions: state.transactions));
+        } else {
+          emit(TransactionState.failure(
+            message: 'Transaction not found',
+            transactions: state.transactions,
+          ));
+        }
+      },
+    );
   }
 
   Future<void> _onCreateTransaction(
     CreateTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(TransactionLoading());
+    emit(TransactionState.loading(transactions: state.transactions));
 
     final result = await _createTransaction(
       CreateTransactionParams(
-        accountId: event.accountId,
-        categoryId: event.categoryId,
-        amount: event.amount,
-        type: event.type,
-        date: event.date,
+        accountId: event.transaction.accountId,
+        categoryId: event.transaction.categoryId,
+        amount: event.transaction.amount,
+        type: event.transaction.type,
+        date: event.transaction.date,
+        note: event.transaction.note,
       ),
     );
 
-    result.fold(
-      (failure) => emit(TransactionError(failure.msg)),
-      (transaction) => emit(TransactionCreated(transaction)),
+    await result.fold(
+      (failure) async => emit(TransactionState.failure(
+        message: failure.msg,
+        transactions: state.transactions,
+      )),
+      (transaction) async {
+        await _refreshAndEmitSuccess(emit, TransactionOperation.create);
+      },
     );
   }
 
@@ -99,24 +108,18 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     UpdateTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(TransactionLoading());
+    emit(TransactionState.loading(transactions: state.transactions));
 
-    final result = await _updateTransaction(
-      UpdateTransactionParams(
-        transaction: event.transaction,
-        accountId: event.accountId,
-        categoryId: event.categoryId,
-        amount: event.amount,
-        type: event.type,
-        note: event.note,
-        tags: event.tags!,
-        date: event.date,
-      ),
-    );
+    final result = await _updateTransaction(event.transaction);
 
-    result.fold(
-      (failure) => emit(TransactionError(failure.msg)),
-      (transaction) => emit(TransactionUpdated(transaction)),
+    await result.fold(
+      (failure) async => emit(TransactionState.failure(
+        message: failure.msg,
+        transactions: state.transactions,
+      )),
+      (transaction) async {
+        await _refreshAndEmitSuccess(emit, TransactionOperation.update);
+      },
     );
   }
 
@@ -124,13 +127,35 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     DeleteTransactionEvent event,
     Emitter<TransactionState> emit,
   ) async {
-    emit(TransactionLoading());
+    emit(TransactionState.loading(transactions: state.transactions));
 
     final result = await _deleteTransaction(event.transactionId);
 
+    await result.fold(
+      (failure) async => emit(TransactionState.failure(
+        message: failure.msg,
+        transactions: state.transactions,
+      )),
+      (_) async {
+        await _refreshAndEmitSuccess(emit, TransactionOperation.delete);
+      },
+    );
+  }
+
+  Future<void> _refreshAndEmitSuccess(
+    Emitter<TransactionState> emit,
+    TransactionOperation operation,
+  ) async {
+    final result = await _getTransactions(const GetTransactionsParams());
     result.fold(
-      (failure) => emit(TransactionError(failure.msg)),
-      (_) => emit(TransactionDeleted(event.transactionId)),
+      (failure) => emit(TransactionState.failure(
+        message: failure.msg,
+        transactions: state.transactions,
+      )),
+      (transactions) => emit(TransactionState.success(
+        operation: operation,
+        transactions: transactions,
+      )),
     );
   }
 }

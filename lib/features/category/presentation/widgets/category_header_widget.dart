@@ -16,7 +16,7 @@ Widget buildCategoryHeader({
           Align(
             alignment: Alignment.centerLeft,
             child: HeaderActionButton(
-              icon: Icon(AppIcons.close(context), size: 18),
+              icon: Icon(AppIcons.close),
               onTap: onClose,
             ),
           ),
@@ -31,10 +31,7 @@ Widget buildCategoryHeader({
           // Add button
           Align(
             alignment: Alignment.centerRight,
-            child: HeaderActionButton(
-              icon: Icon(AppIcons.add(context), size: 18),
-              onTap: onClose,
-            ),
+            child: HeaderActionButton(icon: Icon(AppIcons.add), onTap: onClose),
           ),
         ],
       ),

@@ -1,27 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spently/core/constants/app_colors.dart';
-import 'package:spently/core/constants/app_sizes.dart';
+import 'package:spently/core/shared/icons/app_icons.dart';
+import 'package:spently/core/shared/widgets/app_sheet.dart';
+import 'package:spently/core/shared/widgets/header_widget.dart';
+import 'package:spently/features/account/domain/entities/account_entity.dart';
 import 'package:spently/features/account/presentation/bloc/account_bloc.dart';
 import 'package:spently/features/account/presentation/bloc/account_event.dart';
 import 'package:spently/features/account/presentation/bloc/account_state.dart';
+import 'package:spently/features/account/presentation/pages/account_form_sheet.dart';
+import 'package:spently/features/account/presentation/widgets/account_add_card_widget.dart';
 import 'package:spently/features/account/presentation/widgets/account_card.dart';
-import 'package:spently/features/account/presentation/widgets/account_header.dart';
-import 'package:spently/features/category/presentation/pages/categories_sheet.dart';
 
 class AccountsSheet extends StatefulWidget {
-  const AccountsSheet({super.key});
+  /// Optional callback for local selection (doesn't affect global state)
+  final ValueChanged<AccountEntity>? onAccountSelected;
 
+  const AccountsSheet({super.key, this.onAccountSelected});
+
+  /// Shows the sheet for global account selection (affects AccountBloc state)
   static Future<bool?> show(BuildContext context) {
-    return showModalBottomSheet<bool>(
+    final accountBloc = context.read<AccountBloc>();
+    return AppSheet.show(
       context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black54,
-      builder: (_) => const AccountsSheet(),
+      initialChildSize: 0.9,
+      minChildSize: 0.9,
+      maxChildSize: 0.9,
+      child: BlocProvider.value(
+        value: accountBloc,
+        child: const AccountsSheet(),
+      ),
     );
+  }
+
+  /// Shows the sheet for local account selection (returns selected account without affecting global state)
+  static Future<AccountEntity?> showForSelection(BuildContext context) {
+    final accountBloc = context.read<AccountBloc>();
+    AccountEntity? selectedAccount;
+
+    return AppSheet.show<AccountEntity?>(
+      context: context,
+      initialChildSize: 0.9,
+      minChildSize: 0.9,
+      maxChildSize: 0.9,
+      child: BlocProvider.value(
+        value: accountBloc,
+        child: AccountsSheet(
+          onAccountSelected: (account) {
+            selectedAccount = account;
+          },
+        ),
+      ),
+    ).then((_) => selectedAccount);
   }
 
   @override
@@ -29,87 +58,120 @@ class AccountsSheet extends StatefulWidget {
 }
 
 class _AccountsSheetState extends State<AccountsSheet> {
-  Future<void> _openCategoriesSheet() async {
-    await CategoriesSheet.show(context);
-  }
+  bool _shuffleMode = false;
 
-  void _closeSheet() {
-    Navigator.of(context).pop();
+  Future<void> _openAccountForm({AccountEntity? account}) async {
+    await AccountFormSheet.show(context: context, account: account);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AccountBloc, AccountState>(
       listener: (context, state) {
-        if (state is AccountDeleted ||
-            state is AccountCreated ||
-            state is AccountUpdated) {
-          context.read<AccountBloc>().add(LoadAccountsEvent());
-        } else if (state is AccountError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
-        }
+        state.maybeWhen(
+          failure: (message, _, __) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
+          },
+          orElse: () {},
+        );
       },
       builder: (context, state) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.9,
-          minChildSize: 0.5,
-          maxChildSize: 0.9,
-          builder: (context, scollcontroller) {
-            return GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: context.surface,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(AppSizes.radiusTwoXLarge),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    buildAccountHeader(
-                      context: context,
-                      onOpenCategoriesSheet: _openCategoriesSheet,
-                      onClose: _closeSheet,
-                    ),
-                    _buildContent(
-                      context: context,
-                      state: state,
-                      scrollController: scollcontroller,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+        return Column(
+          children: [
+            Header(
+              title: const Text('Accounts', style: TextStyle(fontSize: 18)),
+              trailingIcon: _shuffleMode
+                  ? const Icon(AppIcons.check)
+                  : const Icon(AppIcons.arrowUpDown),
+              trailingAction: () => setState(() {
+                _shuffleMode = !_shuffleMode;
+              }),
+            ),
+            Expanded(
+              child: _buildContent(context: context, state: state),
+            ),
+          ],
         );
       },
     );
   }
 
+  void _selectAccount(AccountEntity account) {
+    if (widget.onAccountSelected != null) {
+      // Local selection mode - just call callback and close
+      widget.onAccountSelected!(account);
+      Navigator.of(context).pop();
+    } else {
+      // Global selection mode - update bloc state
+      context.read<AccountBloc>().add(SelectAccountEvent(accountId: account.id));
+      Navigator.of(context).pop();
+    }
+  }
+
   Widget _buildContent({
     required BuildContext context,
     required AccountState state,
-    required ScrollController scrollController,
   }) {
-    if (state is AccountsLoaded) {
-      final accounts = state.accounts;
-
-      return Expanded(
-        child: ListView.builder(
-          controller: scrollController,
-          itemCount: accounts.length,
+    return state.maybeWhen(
+      loaded: (accounts, selectedAccount) {
+        final sortedAccounts = List<AccountEntity>.from(accounts)
+          ..sort((a, b) => a.order.compareTo(b.order));
+        return ListView.builder(
+          itemCount: sortedAccounts.length + 1,
           itemBuilder: (context, index) {
-            final account = accounts[index];
-
-            return buildAccountCard(context: context, account: account);
+            if (index == sortedAccounts.length) {
+              return buildAddAccountCard(
+                context: context,
+                onTap: _openAccountForm,
+              );
+            }
+            final account = sortedAccounts[index];
+            return AccountCard(
+              shuffleMode: _shuffleMode,
+              account: account,
+              onTap: () => _selectAccount(account),
+              onEdit: !_shuffleMode
+                  ? () => _openAccountForm(account: account)
+                  : null,
+            );
           },
-        ),
-      );
-    }
-
-    return const Center(child: Text('No accounts found'));
+        );
+      },
+      loading: (accounts, _) {
+        if (accounts.isNotEmpty) {
+          final sortedAccounts = List<AccountEntity>.from(accounts)
+            ..sort((a, b) => a.order.compareTo(b.order));
+          return Stack(
+            children: [
+              ListView.builder(
+                itemCount: sortedAccounts.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == sortedAccounts.length) {
+                    return buildAddAccountCard(
+                      context: context,
+                      onTap: _openAccountForm,
+                    );
+                  }
+                  final account = sortedAccounts[index];
+                  return AccountCard(
+                    shuffleMode: _shuffleMode,
+                    account: account,
+                    onTap: () => _selectAccount(account),
+                    onEdit: !_shuffleMode
+                        ? () => _openAccountForm(account: account)
+                        : null,
+                  );
+                },
+              ),
+              const Center(child: CircularProgressIndicator()),
+            ],
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
+      orElse: () => const Center(child: Text('No accounts found')),
+    );
   }
 }

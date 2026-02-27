@@ -85,7 +85,10 @@ class CategoryRepositoryImpl implements CategoryRepository {
       final existingCategories = await _localDataSource.getCategories();
 
       if (existingCategories.isNotEmpty) {
-        return const Right(null);
+        // TODO: Remove after migration - clear old categories with incorrect icon values
+        await _localDataSource.clearCategories();
+
+        // return const Right(null);  // Restore this line
       }
 
       final defaultCategories = AppDefaults(uuid: _uuid).getDefaultCategories();

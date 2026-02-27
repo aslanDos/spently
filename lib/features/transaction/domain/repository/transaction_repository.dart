@@ -25,7 +25,6 @@ class TransactionFilter {
   final String? accountId;
   final String? categoryId;
   final TransactionType? type;
-  final String? tag;
 
   const TransactionFilter({
     this.startDate,
@@ -33,6 +32,5 @@ class TransactionFilter {
     this.accountId,
     this.categoryId,
     this.type,
-    this.tag,
   });
 }

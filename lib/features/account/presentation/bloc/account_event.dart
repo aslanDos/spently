@@ -1,72 +1,34 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:spently/features/account/domain/entities/account_entity.dart';
 
-abstract class AccountEvent extends Equatable {
-  const AccountEvent();
+part 'account_event.freezed.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+@freezed
+class AccountEvent with _$AccountEvent {
+  const factory AccountEvent.loadAccounts() = LoadAccountsEvent;
 
-class LoadAccountEvent extends AccountEvent {
-  final String accountId;
+  const factory AccountEvent.loadAccount({
+    required String accountId,
+  }) = LoadAccountEvent;
 
-  const LoadAccountEvent({required this.accountId});
+  const factory AccountEvent.create({
+    required AccountEntity account,
+  }) = CreateAccountEvent;
 
-  @override
-  List<Object?> get props => [accountId];
-}
+  const factory AccountEvent.update({
+    required AccountEntity account,
+  }) = UpdateAccountEvent;
 
-class LoadAccountsEvent extends AccountEvent {
-  const LoadAccountsEvent();
+  const factory AccountEvent.delete({
+    required String accountId,
+  }) = DeleteAccountEvent;
 
-  @override
-  List<Object?> get props => [];
-}
+  const factory AccountEvent.updateBalance({
+    required String accountId,
+    required double amount,
+  }) = UpdateAccountBalanceEvent;
 
-class CreateAccountEvent extends AccountEvent {
-  final AccountEntity account;
-
-  const CreateAccountEvent({required this.account});
-
-  @override
-  List<Object?> get props => [account];
-}
-
-class UpdateAccountEvent extends AccountEvent {
-  final AccountEntity account;
-
-  const UpdateAccountEvent({required this.account});
-
-  @override
-  List<Object?> get props => [account];
-}
-
-class DeleteAccountEvent extends AccountEvent {
-  final String accountId;
-
-  const DeleteAccountEvent({required this.accountId});
-
-  @override
-  List<Object?> get props => [accountId];
-}
-
-class UpdateAccountBalanceEvent extends AccountEvent {
-  final String accountId;
-  final double amount;
-
-  const UpdateAccountBalanceEvent({
-    required this.accountId,
-    required this.amount,
-  });
-
-  @override
-  List<Object?> get props => [accountId, amount];
-}
-
-class SeedDefaultAccountEvent extends AccountEvent {
-  const SeedDefaultAccountEvent();
-
-  @override
-  List<Object?> get props => [];
+  const factory AccountEvent.select({
+    required String accountId,
+  }) = SelectAccountEvent;
 }

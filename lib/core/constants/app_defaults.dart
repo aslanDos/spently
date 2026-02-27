@@ -8,19 +8,22 @@ class AppDefaults {
   final Uuid uuid;
   AppDefaults({required this.uuid});
 
-  AccountModel getDefaultAccount() {
+  List<AccountModel> getDefaultAccount() {
     final now = DateTime.now();
-    return AccountModel(
-      id: uuid.v4(),
-      name: 'Card',
-      balance: 0.0,
-      currency: 'KZT',
-      icon: AppIconType.card.name,
-      color: '4DAF90',
-      isDefault: true,
-      createdAt: now,
-      updatedAt: now,
-    );
+    return [
+      AccountModel(
+        id: uuid.v4(),
+        name: 'Card',
+        balance: 2500,
+        currency: 'KZT',
+        icon: AppIconType.piggyBank.value,
+        color: '1E88E5',
+        isDefault: true,
+        order: 0,
+        createdAt: now,
+        updatedAt: now,
+      ),
+    ];
   }
 
   List<CategoryModel> getDefaultCategories() {
@@ -32,7 +35,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Salary',
         type: CategoryType.income,
-        icon: 'work',
+        icon: AppIconType.buisnessCase.value,
         color: '4CAF50',
         isDefault: true,
         createdAt: now,
@@ -43,7 +46,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Freelance',
         type: CategoryType.income,
-        icon: 'computer',
+        icon: AppIconType.laptop.value,
         color: '2196F3',
         isDefault: true,
         createdAt: now,
@@ -54,7 +57,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Gifts',
         type: CategoryType.income,
-        icon: 'card_giftcard',
+        icon: AppIconType.gift.value,
         color: 'E91E63',
         isDefault: true,
         createdAt: now,
@@ -63,21 +66,22 @@ class AppDefaults {
       ),
       CategoryModel(
         id: uuid.v4(),
-        name: 'Investments',
+        name: 'Investements',
         type: CategoryType.income,
-        icon: 'trending_up',
+        icon: AppIconType.chartCandleStick.value,
         color: '9C27B0',
         isDefault: true,
         createdAt: now,
         updatedAt: now,
         order: 3,
       ),
+
       // Expense categories
       CategoryModel(
         id: uuid.v4(),
         name: 'Food',
         type: CategoryType.expense,
-        icon: 'restaurant',
+        icon: AppIconType.fishingHook.value,
         color: 'FF9800',
         isDefault: true,
         createdAt: now,
@@ -88,7 +92,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Transport',
         type: CategoryType.expense,
-        icon: 'directions_car',
+        icon: AppIconType.car.value,
         color: '607D8B',
         isDefault: true,
         createdAt: now,
@@ -99,7 +103,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Shopping',
         type: CategoryType.expense,
-        icon: 'shopping_bag',
+        icon: AppIconType.shoppingBag.value,
         color: 'F44336',
         isDefault: true,
         createdAt: now,
@@ -110,7 +114,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Entertainment',
         type: CategoryType.expense,
-        icon: 'movie',
+        icon: AppIconType.cableCar.value,
         color: '673AB7',
         isDefault: true,
         createdAt: now,
@@ -121,7 +125,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Health',
         type: CategoryType.expense,
-        icon: 'local_hospital',
+        icon: AppIconType.pill.value,
         color: '00BCD4',
         isDefault: true,
         createdAt: now,
@@ -132,7 +136,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Education',
         type: CategoryType.expense,
-        icon: 'school',
+        icon: AppIconType.graduationHat.value,
         color: '3F51B5',
         isDefault: true,
         createdAt: now,
@@ -143,7 +147,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Travel',
         type: CategoryType.expense,
-        icon: 'flight',
+        icon: AppIconType.plane.value,
         color: '009688',
         isDefault: true,
         createdAt: now,
@@ -154,7 +158,7 @@ class AppDefaults {
         id: uuid.v4(),
         name: 'Gifts',
         type: CategoryType.expense,
-        icon: 'card_giftcard',
+        icon: AppIconType.gift.value,
         color: 'E91E63',
         isDefault: true,
         createdAt: now,

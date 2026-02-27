@@ -43,7 +43,6 @@ class CreateTransactionUseCase
       type: params.type,
       date: params.date,
       note: params.note,
-      tags: params.tags,
       createdAt: now,
       updatedAt: now,
     );
@@ -59,7 +58,6 @@ class CreateTransactionParams {
   final TransactionType type;
   final DateTime date;
   final String? note;
-  final List<String> tags;
 
   const CreateTransactionParams({
     required this.accountId,
@@ -68,6 +66,5 @@ class CreateTransactionParams {
     required this.type,
     required this.date,
     this.note,
-    this.tags = const [],
   });
 }

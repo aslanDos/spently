@@ -39,6 +39,10 @@ class HiveService {
     return Hive.openBox<T>(boxName);
   }
 
+  Future<void> deleteBox(String boxName) async {
+    await Hive.deleteBoxFromDisk(boxName);
+  }
+
   Future<void> closeAllBoxes() async {
     await Hive.close();
   }

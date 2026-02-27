@@ -34,6 +34,10 @@ class AccountModel extends AccountEntity {
   final bool isDefault;
 
   @override
+  @HiveField(10)
+  final int order;
+
+  @override
   @HiveField(8)
   final DateTime createdAt;
 
@@ -45,10 +49,11 @@ class AccountModel extends AccountEntity {
     required this.id,
     required this.name,
     this.balance = 0.0,
-    this.currency = 'USD',
+    this.currency = 'KZT',
     this.icon,
     this.color,
     this.isDefault = false,
+    this.order = 0,
     required this.createdAt,
     required this.updatedAt,
   }) : super(
@@ -59,6 +64,7 @@ class AccountModel extends AccountEntity {
          icon: icon,
          color: color,
          isDefault: isDefault,
+         order: order,
          createdAt: createdAt,
          updatedAt: updatedAt,
        );
@@ -72,6 +78,7 @@ class AccountModel extends AccountEntity {
       icon: entity.icon,
       color: entity.color,
       isDefault: entity.isDefault,
+      order: entity.order,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     );
@@ -86,6 +93,7 @@ class AccountModel extends AccountEntity {
     String? icon,
     String? color,
     bool? isDefault,
+    int? order,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -97,6 +105,7 @@ class AccountModel extends AccountEntity {
       icon: icon ?? this.icon,
       color: color ?? this.color,
       isDefault: isDefault ?? this.isDefault,
+      order: order ?? this.order,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

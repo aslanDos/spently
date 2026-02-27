@@ -4,7 +4,7 @@ import 'package:spently/core/utils/id_generator.dart';
 import 'package:spently/features/account/data/data_source/account_local_data_source.dart';
 import 'package:spently/features/account/data/data_source/account_local_data_source_impl.dart';
 import 'package:spently/features/account/data/repository/account_repository_impl.dart';
-import 'package:spently/features/account/domain/repository/account_repostiory.dart';
+import 'package:spently/features/account/domain/repository/account_repository.dart';
 import 'package:spently/features/account/presentation/bloc/account_bloc.dart';
 import 'package:spently/features/category/data/data_source/category_local_data_source.dart';
 import 'package:spently/features/category/data/data_source/category_local_data_source_impl.dart';

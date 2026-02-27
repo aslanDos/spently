@@ -5,7 +5,7 @@ import 'package:spently/core/errors/failures.dart';
 import 'package:spently/features/account/data/data_source/account_local_data_source.dart';
 import 'package:spently/features/account/data/models/account_model.dart';
 import 'package:spently/features/account/domain/entities/account_entity.dart';
-import 'package:spently/features/account/domain/repository/account_repostiory.dart';
+import 'package:spently/features/account/domain/repository/account_repository.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   final AccountLocalDataSource _localDataSource;
@@ -41,7 +41,16 @@ class AccountRepositoryImpl implements AccountRepository {
     AccountEntity account,
   ) async {
     try {
-      final model = AccountModel.fromEntity(account);
+      final existingAccounts = await _localDataSource.getAccounts();
+      final maxOrder = existingAccounts.isEmpty
+          ? -1
+          : existingAccounts.map((a) => a.order).reduce((a, b) => a > b ? a : b);
+
+      final accountWithIdAndOrder = account.copyWith(
+        id: account.id.isEmpty ? _uuid.v4() : account.id,
+        order: maxOrder + 1,
+      );
+      final model = AccountModel.fromEntity(accountWithIdAndOrder);
       await _localDataSource.saveAccount(model);
       return Right(model);
     } catch (e) {
@@ -100,9 +109,6 @@ class AccountRepositoryImpl implements AccountRepository {
   @override
   Future<Either<Failure, void>> seedDefaultAccount() async {
     try {
-      // // Remove this line after testing icons
-      // await _localDataSource.clearAccounts();
-
       final existingAccounts = await _localDataSource.getAccounts();
 
       if (existingAccounts.isNotEmpty) {
@@ -111,7 +117,7 @@ class AccountRepositoryImpl implements AccountRepository {
 
       final defaultAccount = AppDefaults(uuid: _uuid).getDefaultAccount();
 
-      await _localDataSource.saveAccount(defaultAccount);
+      await _localDataSource.saveAccounts(defaultAccount);
 
       return const Right(null);
     } catch (e) {

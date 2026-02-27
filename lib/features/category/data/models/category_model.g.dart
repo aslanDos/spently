@@ -21,7 +21,7 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       name: fields[1] as String,
       type: fields[2] as CategoryType,
       icon: fields[3] as String,
-      color: fields[4] as String,
+      color: fields[4] as String?,
       isDefault: fields[5] as bool,
       createdAt: fields[6] as DateTime,
       updatedAt: fields[7] as DateTime,

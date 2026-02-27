@@ -20,7 +20,7 @@ Widget buildTransactionFormHeader({
           Align(
             alignment: Alignment.centerLeft,
             child: HeaderActionButton(
-              icon: Icon(AppIcons.close(context), size: 18),
+              icon: Icon(AppIcons.close),
               onTap: onClose,
             ),
           ),

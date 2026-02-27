@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spently/core/constants/app_colors.dart';
+import 'package:spently/core/constants/app_radius.dart';
 import 'package:spently/core/constants/app_sizes.dart';
 import 'package:spently/core/constants/app_text_styles.dart';
 
@@ -25,171 +26,195 @@ sealed class AppTheme {
     labelSmall: AppTextStyle.labelSmall,
   );
 
-  static const BorderRadius _buttonRadius = BorderRadius.all(
-    Radius.circular(AppSizes.radiusFull),
+  // Common border radius, independent of color scheme
+  static const double defaultRadius = AppRadius.radius24;
+  static const BorderRadius defaultBorderRadius = BorderRadius.all(
+    Radius.circular(defaultRadius),
+  );
+  static const BorderRadius cardBorderRadius = BorderRadius.all(
+    Radius.circular(AppRadius.radius12),
+  );
+  static const BorderRadius buttonBorderRadius = BorderRadius.all(
+    Radius.circular(AppRadius.radius28),
+  );
+  static const BorderRadius inputBorderRadius = BorderRadius.all(
+    Radius.circular(AppRadius.radius24),
   );
 
-  static const BorderRadius _cardRadius = BorderRadius.all(
-    Radius.circular(AppSizes.radiusLarge),
-  );
+  static const List<BoxShadow> defaultBoxShadow = <BoxShadow>[
+    BoxShadow(
+      color: AppColors.backgroundDark,
+      offset: Offset(0, 6),
+      blurRadius: 16,
+    ),
+  ];
 
   static ThemeData _buildTheme(ColorScheme scheme) {
+    final AppBarTheme appBarTheme = AppBarTheme(
+      backgroundColor: scheme.surface,
+      foregroundColor: scheme.onSurface,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      centerTitle: true,
+      titleTextStyle: AppTextStyle.titleLarge.copyWith(
+        color: scheme.onSurface,
+        fontWeight: AppFontWeight.semiBold,
+      ),
+    );
+
+    final CardThemeData cardTheme = CardThemeData(
+      color: scheme.surfaceContainer,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(borderRadius: cardBorderRadius),
+      margin: const EdgeInsets.all(AppSizes.xSmall),
+    );
+
+    final ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: scheme.surface,
+        foregroundColor: scheme.primary,
+        shape: const RoundedRectangleBorder(borderRadius: buttonBorderRadius),
+        padding: EdgeInsets.zero,
+        textStyle: AppTextStyle.bodyMedium.copyWith(
+          fontWeight: AppFontWeight.semiBold,
+        ),
+      ),
+    );
+
+    final OutlinedButtonThemeData outlinedButtonTheme = OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.zero,
+        textStyle: AppTextStyle.bodyMedium.copyWith(
+          fontWeight: AppFontWeight.semiBold,
+        ),
+        foregroundColor: scheme.onSurface,
+        side: BorderSide(color: scheme.outlineVariant),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.radius12)),
+        ),
+      ),
+    );
+
+    final TextButtonThemeData textButtonTheme = TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: scheme.primary,
+        shape: const RoundedRectangleBorder(borderRadius: buttonBorderRadius),
+        padding: EdgeInsets.zero,
+        textStyle: AppTextStyle.bodyMedium.copyWith(
+          fontWeight: AppFontWeight.semiBold,
+        ),
+      ),
+    );
+
+    final InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+      filled: true,
+      fillColor: scheme.surfaceContainer,
+      border: const OutlineInputBorder(
+        borderRadius: inputBorderRadius,
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: const OutlineInputBorder(
+        borderRadius: inputBorderRadius,
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: inputBorderRadius,
+        borderSide: BorderSide(color: scheme.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: inputBorderRadius,
+        borderSide: BorderSide(color: scheme.error),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: inputBorderRadius,
+        borderSide: BorderSide(color: scheme.error, width: 2),
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.medium,
+        vertical: AppSizes.small,
+      ),
+      hintStyle: AppTextStyle.bodyMedium.copyWith(
+        color: scheme.onSurfaceVariant,
+      ),
+    );
+
+    final SwitchThemeData switchTheme = SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        return states.contains(WidgetState.selected)
+            ? scheme.primary
+            : scheme.outline;
+      }),
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        return states.contains(WidgetState.selected)
+            ? scheme.primary.withOpacity(0.4)
+            : scheme.surfaceVariant;
+      }),
+    );
+
+    final FloatingActionButtonThemeData FABTheme =
+        FloatingActionButtonThemeData(
+          backgroundColor: scheme.primary,
+          foregroundColor: scheme.onPrimary,
+          elevation: 0,
+          shape: const CircleBorder(),
+        );
+
+    final CheckboxThemeData checkBoxTheme = CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        return states.contains(WidgetState.selected)
+            ? scheme.primary
+            : Colors.transparent;
+      }),
+      checkColor: WidgetStateProperty.all(scheme.onPrimary),
+      side: BorderSide(color: scheme.outline),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.radius4),
+      ),
+    );
+
+    final DividerThemeData dividerTheme = DividerThemeData(
+      color: scheme.outline,
+      thickness: 1,
+      space: AppSizes.medium,
+    );
+
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       brightness: scheme.brightness,
       textTheme: _textTheme,
-      scaffoldBackgroundColor: scheme.background,
+      scaffoldBackgroundColor: scheme.surface,
       visualDensity: VisualDensity.adaptivePlatformDensity,
 
       // ================= APP BAR =================
-      appBarTheme: AppBarTheme(
-        backgroundColor: scheme.surface,
-        foregroundColor: scheme.onSurface,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        titleTextStyle: AppTextStyle.titleLarge.copyWith(
-          color: scheme.onSurface,
-          fontWeight: AppFontWeight.semiBold,
-        ),
-      ),
+      appBarTheme: appBarTheme,
 
       // ================= CARD =================
-      cardTheme: CardThemeData(
-        color: scheme.surface,
-        elevation: 0,
-        margin: const EdgeInsets.all(AppSizes.small),
-        shape: const RoundedRectangleBorder(borderRadius: _cardRadius),
-      ),
+      cardTheme: cardTheme,
 
       // ================= ELEVATED BUTTON =================
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: scheme.primary,
-          foregroundColor: scheme.onPrimary,
-          elevation: 0,
-          shape: const RoundedRectangleBorder(borderRadius: _buttonRadius),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSizes.large,
-            vertical: AppSizes.medium,
-          ),
-          textStyle: AppTextStyle.bodyMedium.copyWith(
-            fontWeight: AppFontWeight.semiBold,
-          ),
-        ),
-      ),
+      elevatedButtonTheme: elevatedButtonTheme,
 
       // ================= OUTLINED BUTTON =================
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: scheme.onSurface,
-          side: BorderSide(color: scheme.outline),
-          shape: const RoundedRectangleBorder(borderRadius: _buttonRadius),
-          textStyle: AppTextStyle.bodyMedium,
-        ),
-      ),
+      outlinedButtonTheme: outlinedButtonTheme,
 
       // ================= TEXT BUTTON =================
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: scheme.primary,
-          shape: const RoundedRectangleBorder(borderRadius: _buttonRadius),
-          textStyle: AppTextStyle.bodyMedium,
-        ),
-      ),
+      textButtonTheme: textButtonTheme,
 
       // ================= INPUTS =================
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: scheme.surfaceVariant,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSizes.medium,
-          vertical: AppSizes.small,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
-          borderSide: BorderSide(color: scheme.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
-          borderSide: BorderSide(color: scheme.error),
-        ),
-        hintStyle: AppTextStyle.bodyMedium.copyWith(
-          color: scheme.onSurfaceVariant,
-        ),
-      ),
+      inputDecorationTheme: inputDecorationTheme,
 
       // ================= FAB =================
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: scheme.primary,
-        foregroundColor: scheme.onPrimary,
-        elevation: 0,
-        shape: const CircleBorder(),
-      ),
+      floatingActionButtonTheme: FABTheme,
 
       // ================= SWITCH =================
-      switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) {
-          return states.contains(WidgetState.selected)
-              ? scheme.primary
-              : scheme.outline;
-        }),
-        trackColor: WidgetStateProperty.resolveWith((states) {
-          return states.contains(WidgetState.selected)
-              ? scheme.primary.withOpacity(0.4)
-              : scheme.surfaceVariant;
-        }),
-      ),
+      switchTheme: switchTheme,
 
       // ================= CHECKBOX =================
-      checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith((states) {
-          return states.contains(WidgetState.selected)
-              ? scheme.primary
-              : Colors.transparent;
-        }),
-        checkColor: WidgetStateProperty.all(scheme.onPrimary),
-        side: BorderSide(color: scheme.outline),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSizes.radiusSmall),
-        ),
-      ),
+      checkboxTheme: checkBoxTheme,
 
       // ================= DIVIDER =================
-      dividerTheme: DividerThemeData(
-        color: scheme.outline,
-        thickness: 1,
-        space: AppSizes.medium,
-      ),
-
-      // ================= BOTTOM NAV =================
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: scheme.surface,
-        selectedItemColor: scheme.primary,
-        unselectedItemColor: scheme.onSurfaceVariant,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-      ),
-
-      // ================= BOTTOM SHEET =================
-      bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: scheme.surface,
-        elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppSizes.radiusLarge),
-          ),
-        ),
-      ),
+      dividerTheme: dividerTheme,
     );
   }
 }

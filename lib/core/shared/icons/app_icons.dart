@@ -1,41 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class AppIcons {
   AppIcons._();
 
-  static IconData add(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
-    return isIOS ? CupertinoIcons.add : Icons.add;
-  }
-
-  static IconData close(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
-    return isIOS ? CupertinoIcons.xmark : Icons.close;
-  }
-
-  static IconData sort(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
-    return isIOS ? CupertinoIcons.arrow_up_arrow_down : Icons.swap_vert;
-  }
-
-  static IconData arrowUpleft(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
-    return isIOS ? CupertinoIcons.arrow_up_left : Icons.north_west;
-  }
-
-  static IconData arrowDownRight(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
-    return isIOS ? CupertinoIcons.arrow_down_right : Icons.south_east;
-  }
-
-  static IconData arrowUpArrowDown(BuildContext context) {
-    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
-    return isIos ? CupertinoIcons.arrow_up_arrow_down : Icons.swap_horiz;
-  }
+  static const IconData chevronBottom = LucideIcons.chevronDown;
+  static const IconData add = LucideIcons.plus;
+  static const IconData close = LucideIcons.x;
+  static const IconData arrowUpleft = LucideIcons.arrowUpLeft;
+  static const IconData arrowDownRight = LucideIcons.arrowDownRight;
+  static const IconData arrowUpDown = LucideIcons.arrowUpDown;
+  static const IconData check = LucideIcons.check;
+  static const IconData pencil = LucideIcons.pencil;
+  static const IconData gripVertical = LucideIcons.gripVertical;
+  static const IconData trash = LucideIcons.trash2;
+  static const IconData calendar = LucideIcons.calendarDays;
+  static const IconData empty = LucideIcons.octagonMinus;
 }

@@ -30,9 +30,7 @@ class TransactionModel extends TransactionEntity {
   @HiveField(5)
   final DateTime date;
 
-  @override
-  @HiveField(6)
-  final List<String> tags;
+  // HiveField(6) was tags - removed, keeping index unused for data compatibility
 
   @override
   @HiveField(7)
@@ -54,7 +52,6 @@ class TransactionModel extends TransactionEntity {
     required this.type,
     required this.date,
     this.note,
-    this.tags = const [],
     required this.createdAt,
     required this.updatedAt,
   }) : super(
@@ -65,7 +62,6 @@ class TransactionModel extends TransactionEntity {
          type: type,
          date: date,
          note: note,
-         tags: tags,
          createdAt: createdAt,
          updatedAt: updatedAt,
        );
@@ -79,7 +75,6 @@ class TransactionModel extends TransactionEntity {
       type: entity.type,
       date: entity.date,
       note: entity.note,
-      tags: entity.tags,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     );
@@ -93,7 +88,6 @@ class TransactionModel extends TransactionEntity {
     double? amount,
     TransactionType? type,
     DateTime? date,
-    List<String>? tags,
     String? note,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -106,7 +100,6 @@ class TransactionModel extends TransactionEntity {
       type: type ?? this.type,
       date: date ?? this.date,
       note: note ?? this.note,
-      tags: tags ?? this.tags,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
